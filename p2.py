@@ -88,7 +88,6 @@ def plan_next_action(user_input, memory):
     - Decides to ask follow-up, answer, or fallback to LLM
     """
     user_input_lower = user_input.lower()
-    # Example: If user asks about outlets in Petaling Jaya but not which outlet
     if "outlet" in user_input_lower and "petaling jaya" in user_input_lower:
         # Check if a specific outlet (e.g., SS 2) has been mentioned in the conversation
         if not any(
@@ -97,12 +96,12 @@ def plan_next_action(user_input, memory):
             if hasattr(m, "content")
         ):
             return "ask_followup", "Yes! Which outlet are you referring to?"
-    # If user specifies SS 2 and asks about opening time
+
     if "ss 2" in user_input_lower and (
         "opening time" in user_input_lower or "open" in user_input_lower
     ):
         return "answer", "Ah yes, the SS 2 outlet opens at 9.00AM."
-    # Add more rules or tool calls here as needed
+    
     return "default", None
 
 

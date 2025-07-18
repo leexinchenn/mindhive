@@ -4,7 +4,7 @@ import os
 import uuid
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain.schema import HumanMessage, AIMessage
+from langchain.schema import HumanMessage, AIMessage, SystemMessage
 from dotenv import load_dotenv
 from getpass import getpass
 
@@ -52,12 +52,20 @@ def get_session_memory(session_id: str) -> ChatMessageHistory:
 def save_conversation_history(conversation):
     try:
         serialized_conversation = []
+
         for msg in conversation:
             if isinstance(msg, HumanMessage):
                 serialized_conversation.append({"role": "user", "content": msg.content})
             elif isinstance(msg, AIMessage):
                 serialized_conversation.append(
                     {"role": "assistant", "content": msg.content}
+                )
+            elif isinstance(msg, SystemMessage) and (
+                msg.content.startswith("[TOOL]")
+                or msg.content.startswith("[CONTROLLER]")
+            ):
+                serialized_conversation.append(
+                    {"role": "system", "content": msg.content}
                 )
 
         with open("conversation_history.json", "w") as f:
@@ -82,23 +90,18 @@ def calculator_tool(expression: str):
 def plan_next_action(user_input, memory):
     user_input_lower = user_input.lower()
 
-    if "outlet" in user_input_lower and "petaling jaya" in user_input_lower:
+    if "outlet" in user_input_lower:
         # Check if a specific outlet (e.g., SS 2) has been mentioned in the conversation
-        if not any(
-            "ss 2" in m.content.lower()
-            for m in memory.messages
-            if hasattr(m, "content")
-        ):
+        if not "ss 2" in user_input_lower or not "ss2" in user_input_lower:
             return "ask_followup", "Yes! Which outlet are you referring to?"
+        else:
+            return "answer", "Ah yes, the SS 2 outlet opens at 9.00AM."
 
-    if "ss 2" in user_input_lower and (
-        "opening time" in user_input_lower or "open" in user_input_lower
-    ):
+    if "ss 2" in user_input_lower or "ss2" in user_input_lower:
         return "answer", "Ah yes, the SS 2 outlet opens at 9.00AM."
 
-    # Arithmetic intent detection (very simple: contains numbers and operators)
-    if re.match(r"^\s*what is [\d\s\+\-\*/\(\)\.]+\??$", user_input_lower):
-        # Extract the arithmetic expression
+    arithmetic_pattern = r"^(what is )?[\d\s\+\-\*/\(\)\.]+\??$"
+    if re.match(arithmetic_pattern, user_input_lower):
         expr = re.sub(r"^\s*what is|\?", "", user_input_lower).strip()
         result = calculator_tool(expr)
         if isinstance(result, (int, float)):
@@ -128,33 +131,42 @@ def chat_with_bot(session_id: str):
                 print("Bot: I didn't catch that. Could you please rephrase?")
                 continue
 
+            memory.add_user_message(user_input)
             # --- AGENTIC PLANNER/CONTROLLER ---
             action, response = plan_next_action(user_input, memory)
             if action == "ask_followup":
+                memory.messages.append(
+                    SystemMessage(content="[CONTROLLER] Follow-up Question")
+                )
                 print(f"Bot: {response}")
                 memory.add_ai_message(response)
-                memory.add_user_message(user_input)
                 continue
             elif action == "answer":
+                memory.messages.append(
+                    SystemMessage(content="[CONTROLLER] Outlet Answer")
+                )
                 print(f"Bot: {response}")
                 memory.add_ai_message(response)
-                memory.add_user_message(user_input)
                 continue
             elif action == "calculator":
+                memory.messages.append(SystemMessage(content="[TOOL] Tool: Calculator"))
                 print(f"Bot: {response}")
                 memory.add_ai_message(response)
-                memory.add_user_message(user_input)
                 continue
             elif action == "calculator_error":
+                memory.messages.append(
+                    SystemMessage(content="[TOOL] Tool: Calculator (Error)")
+                )
                 print(f"Bot: {response}")
                 memory.add_ai_message(response)
-                memory.add_user_message(user_input)
                 continue
             # --- END AGENTIC PLANNER/CONTROLLER ---
 
             # Fallback to LLM
-            memory.add_user_message(user_input)
-            ai_response = llm.invoke(memory.messages)
+            valid_msgs = [
+                m for m in memory.messages if isinstance(m, (HumanMessage, AIMessage))
+            ]
+            ai_response = llm.invoke(valid_msgs)
             bot_response = ai_response.content
             memory.add_ai_message(bot_response)
             print(f"Bot: {bot_response}")

@@ -88,7 +88,7 @@ def plan_next_action(user_input, memory):
     - Decides to ask follow-up, answer, or fallback to LLM
     """
     user_input_lower = user_input.lower()
-    if "outlet" in user_input_lower and "petaling jaya" in user_input_lower:
+    if "outlet" in user_input_lower:
         # Check if a specific outlet (e.g., SS 2) has been mentioned in the conversation
         if not any(
             "ss 2" in m.content.lower()

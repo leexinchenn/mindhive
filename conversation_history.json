@@ -4,19 +4,67 @@
         "content": "\nYou are a helpful assistant that answers questions about outlets and their opening times.\nAlways remember the context of the conversation to provide accurate and relevant answers.\nWhen a user mentions a location but does not specify an outlet, ask them to clarify which outlet they are referring to.\nIf the user specifies an outlet, provide accurate opening times for that outlet.\nHere is an example:\nUser: 'Is there an outlet in Petaling Jaya?'\nAssistant: 'Yes! Which outlet are you referring to?'\nUser: 'SS 2, whats the opening time?'\nAssistant: 'Ah yes, the SS 2 outlet opens at 9.00AM.'\nAlways respond concisely and accurately.\n"
     },
     {
-        "role": "assistant",
-        "content": "The answer is 793.2."
+        "role": "user",
+        "content": "outlet?"
     },
     {
-        "role": "user",
-        "content": "what is 793+2/10"
-    },
-    {
-        "role": "user",
-        "content": "10/0"
+        "role": "system",
+        "content": "[CONTROLLER] Follow-up Question"
     },
     {
         "role": "assistant",
-        "content": "Division by zero is undefined."
+        "content": "Yes! Which outlet are you referring to?"
+    },
+    {
+        "role": "user",
+        "content": "klcc"
+    },
+    {
+        "role": "assistant",
+        "content": "The KLCC outlet opens at 10.00AM."
+    },
+    {
+        "role": "user",
+        "content": "ss2"
+    },
+    {
+        "role": "system",
+        "content": "[CONTROLLER] Outlet Answer"
+    },
+    {
+        "role": "assistant",
+        "content": "Ah yes, the SS 2 outlet opens at 9.00AM."
+    },
+    {
+        "role": "user",
+        "content": "9_9"
+    },
+    {
+        "role": "assistant",
+        "content": "I'm sorry, I don't have information on an outlet called 9_9. Can you clarify the name or location of the outlet you're asking about?"
+    },
+    {
+        "role": "user",
+        "content": "9+9"
+    },
+    {
+        "role": "system",
+        "content": "[TOOL] Tool: Calculator"
+    },
+    {
+        "role": "assistant",
+        "content": "The answer is 18."
+    },
+    {
+        "role": "user",
+        "content": "0/0"
+    },
+    {
+        "role": "system",
+        "content": "[TOOL] Tool: Calculator (Error)"
+    },
+    {
+        "role": "assistant",
+        "content": "Sorry, I couldn't calculate that: Error: division by zero"
     }
 ]

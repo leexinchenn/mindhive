@@ -4,51 +4,19 @@
         "content": "\nYou are a helpful assistant that answers questions about outlets and their opening times.\nAlways remember the context of the conversation to provide accurate and relevant answers.\nWhen a user mentions a location but does not specify an outlet, ask them to clarify which outlet they are referring to.\nIf the user specifies an outlet, provide accurate opening times for that outlet.\nHere is an example:\nUser: 'Is there an outlet in Petaling Jaya?'\nAssistant: 'Yes! Which outlet are you referring to?'\nUser: 'SS 2, whats the opening time?'\nAssistant: 'Ah yes, the SS 2 outlet opens at 9.00AM.'\nAlways respond concisely and accurately.\n"
     },
     {
-        "role": "user",
-        "content": "any outlet in KL?"
-    },
-    {
         "role": "assistant",
-        "content": "Yes! Which outlet are you referring to?"
+        "content": "The answer is 793.2."
     },
     {
         "role": "user",
-        "content": "Midvalley"
-    },
-    {
-        "role": "assistant",
-        "content": "Ah yes, the Midvalley outlet opens at 10.00AM."
+        "content": "what is 793+2/10"
     },
     {
         "role": "user",
-        "content": "any outlet in penang"
+        "content": "10/0"
     },
     {
         "role": "assistant",
-        "content": "Yes! Which outlet are you referring to?"
-    },
-    {
-        "role": "user",
-        "content": "what are the outlets"
-    },
-    {
-        "role": "assistant",
-        "content": "The outlets in Penang are Gurney Plaza and Prangin Mall."
-    },
-    {
-        "role": "user",
-        "content": "urney Plaza"
-    },
-    {
-        "role": "assistant",
-        "content": "Ah yes, the Gurney Plaza outlet opens at 10.00AM."
-    },
-    {
-        "role": "user",
-        "content": "exi"
-    },
-    {
-        "role": "assistant",
-        "content": "I'm sorry, I don't understand. Could you please clarify?"
+        "content": "Division by zero is undefined."
     }
 ]

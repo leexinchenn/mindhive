@@ -5,7 +5,7 @@
     },
     {
         "role": "user",
-        "content": "is there an outlet in KL?"
+        "content": "any outlet in KL?"
     },
     {
         "role": "assistant",
@@ -13,10 +13,42 @@
     },
     {
         "role": "user",
-        "content": "one utama"
+        "content": "Midvalley"
     },
     {
         "role": "assistant",
-        "content": "The One Utama outlet opens at 10.00AM."
+        "content": "Ah yes, the Midvalley outlet opens at 10.00AM."
+    },
+    {
+        "role": "user",
+        "content": "any outlet in penang"
+    },
+    {
+        "role": "assistant",
+        "content": "Yes! Which outlet are you referring to?"
+    },
+    {
+        "role": "user",
+        "content": "what are the outlets"
+    },
+    {
+        "role": "assistant",
+        "content": "The outlets in Penang are Gurney Plaza and Prangin Mall."
+    },
+    {
+        "role": "user",
+        "content": "urney Plaza"
+    },
+    {
+        "role": "assistant",
+        "content": "Ah yes, the Gurney Plaza outlet opens at 10.00AM."
+    },
+    {
+        "role": "user",
+        "content": "exi"
+    },
+    {
+        "role": "assistant",
+        "content": "I'm sorry, I don't understand. Could you please clarify?"
     }
 ]

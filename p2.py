@@ -90,18 +90,14 @@ def plan_next_action(user_input, memory):
     user_input_lower = user_input.lower()
     if "outlet" in user_input_lower:
         # Check if a specific outlet (e.g., SS 2) has been mentioned in the conversation
-        if not any(
-            "ss 2" in m.content.lower()
-            for m in memory.messages
-            if hasattr(m, "content")
-        ):
+        if not "ss 2" in user_input_lower or not "ss2" in user_input_lower:
             return "ask_followup", "Yes! Which outlet are you referring to?"
+        else:
+            return "answer", "Ah yes, the SS 2 outlet opens at 9.00AM."
 
-    if "ss 2" in user_input_lower and (
-        "opening time" in user_input_lower or "open" in user_input_lower
-    ):
+    if "ss 2" in user_input_lower or "ss2" in user_input_lower:
         return "answer", "Ah yes, the SS 2 outlet opens at 9.00AM."
-    
+
     return "default", None
 
 
@@ -123,23 +119,21 @@ def chat_with_bot(session_id: str):
             if not user_input:
                 print("Bot: I didn't catch that. Could you please rephrase?")
                 continue
-
+            
+            memory.add_user_message(user_input)
             # --- AGENTIC PLANNER/CONTROLLER ---
             action, response = plan_next_action(user_input, memory)
             if action == "ask_followup":
                 print(f"Bot: {response}")
                 memory.add_ai_message(response)
-                memory.add_user_message(user_input)
                 continue
             elif action == "answer":
                 print(f"Bot: {response}")
                 memory.add_ai_message(response)
-                memory.add_user_message(user_input)
                 continue
             # --- END AGENTIC PLANNER/CONTROLLER ---
 
             # Fallback to LLM
-            memory.add_user_message(user_input)
             ai_response = llm.invoke(memory.messages)
             bot_response = ai_response.content
             memory.add_ai_message(bot_response)

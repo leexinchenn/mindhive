@@ -1,3 +1,8 @@
 langchain_google_genai
 langchain_community
 python-dotenv
+fastapi
+uvicorn
+sentence-transformers
+faiss-cpu
+selenium

@@ -1,8 +1,13 @@
-langchain_google_genai
-langchain_community
-python-dotenv
 fastapi
 uvicorn
+pydantic
+requests
+numpy
 sentence-transformers
 faiss-cpu
+langchain_google_genai
+langchain_community
+langchain
 selenium
+beautifulsoup4
+python-dotenv

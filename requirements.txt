@@ -1,0 +1,24 @@
+# Core FastAPI and API dependencies
+fastapi
+uvicorn
+pydantic
+
+# Data processing and storage
+requests
+numpy
+
+# Machine Learning and AI
+sentence-transformers
+faiss-cpu
+
+# LangChain components
+langchain_google_genai
+langchain_community
+langchain
+
+# Web scraping
+selenium
+beautifulsoup4
+
+# Environment and configuration
+python-dotenv

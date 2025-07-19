@@ -1,24 +1,17 @@
-# Core FastAPI and API dependencies
-fastapi
-uvicorn
-pydantic
-
-# Data processing and storage
-requests
-numpy
-
-# Machine Learning and AI
-sentence-transformers
-faiss-cpu
-
-# LangChain components
-langchain_google_genai
-langchain_community
-langchain
-
-# Web scraping
-selenium
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+requests==2.31.0
+numpy==1.24.3
+sentence-transformers==2.2.2
+faiss-cpu==1.7.4
+langchain-google-genai==1.0.8
+langchain-community==0.0.38
+langchain==0.1.20
+selenium==4.15.2
+pytest==7.4.3
+unittest-xml-reporting==3.2.0
+python-dotenv==1.0.0
+railway==0.0.9
 beautifulsoup4
-
-# Environment and configuration
 python-dotenv

@@ -305,86 +305,7 @@ except SecurityError:
     return "Please rephrase your question"
 ```
 
-### Sample Conversation Screenshots
-
-**Conversation 1: Outlet Discovery**
-```
-🗨️ User: "I need a coffee place"
-🤖 Bot: "I can help you find ZUS Coffee outlets! Which area are you looking for?"
-🗨️ User: "Somewhere in KL with delivery"
-🤖 Bot: "Found 2 ZUS Coffee outlets in Kuala Lumpur with delivery:
-      
-      1. ZUS Coffee KLCC
-         📍 Suria KLCC, Level 2
-         ⏰ 8:00 AM - 11:00 PM
-         🚚 Services: dine-in, delivery
-      
-      2. ZUS Coffee Mid Valley  
-         📍 Mid Valley Megamall
-         ⏰ 8:00 AM - 11:00 PM
-         🚚 Services: dine-in, takeaway, delivery"
-```
-
-**Conversation 2: Product Search**
-```
-🗨️ User: "Show me your drinkware"
-🤖 Bot: "Here are our available ZUS Coffee drinkware products:
-      
-      1. Premium Coffee Mug - RM 25.90
-         ☕ Perfect for your daily coffee ritual
-      
-      2. Travel Tumbler - RM 35.90
-         🚗 Great for coffee on the go
-      
-      3. Cold Brew Bottle - RM 42.90
-         🧊 Designed for cold brew enthusiasts"
-```
-
-**Conversation 3: Calculator Integration**
-```
-🗨️ User: "If I buy 3 mugs at RM 25.90 each, what's the total?"
-🤖 Bot: "Let me calculate that for you: 3 × 25.90 = RM 77.70
-      
-      That's a great choice! The Premium Coffee Mugs are very popular."
-```
-
-**Conversation 4: Error Handling**
-```
-🗨️ User: "'; DROP TABLE outlets; --"
-🤖 Bot: "I notice some unusual characters in your request. Could you please 
-      rephrase your question about ZUS Coffee outlets or products?"
-      
-🗨️ User: "Sorry, I meant outlets in Penang"
-🤖 Bot: "No problem! Let me search for ZUS Coffee outlets in Penang..."
-```
-
-### Testing Interface Screenshots
-
-**1. API Documentation Page (`/docs`)**
-- Clean Swagger UI interface
-- Expandable endpoint sections
-- Try-it-out functionality for each endpoint
-- Real-time schema validation
-
-**2. Products Endpoint Testing**
-- Input field for search query
-- Execute button for API calls
-- JSON response display with syntax highlighting
-- Response time and status code indicators
-
-**3. Outlets Endpoint Testing**
-- Natural language query input
-- Generated SQL query display
-- Formatted results table
-- Error handling demonstrations
-
-**4. Health Check Dashboard**
-- System status indicators
-- Service uptime metrics
-- Database connection status
-- Performance benchmarks
-
-## Implementation Summary# Implementation Summaryd conversational AI system for ZUS Coffee, featuring multi-turn conversations, agentic planning, tool calling, RAG integration, and robust error handling.
+## Implementation Summary
 
 **Live Demo**: [https://mindhive-production.up.railway.app](https://mindhive-production.up.railway.app)
 
@@ -490,31 +411,6 @@ Response ← Response Generator ← API Results ← [Calculator|RAG|Text2SQL]
 - Replaced FAISS vector search with intelligent text scoring
 - Used in-memory storage instead of SQLite
 - Minimal dependencies: `fastapi`, `uvicorn`, `pydantic`, `requests`
-
-## Test Results
-
-| Component | Coverage | Protection Rate |
-|-----------|----------|----------------|
-| Conversation Flow | 100% | Happy/Interrupted paths |
-| Calculator Tool | 100% | Success/Error handling |
-| Security Tests | 100% | 20/20 SQL injection blocked |
-| XSS Protection | 100% | 20/20 attacks sanitized |
-| Load Testing | 100% | 50+ concurrent requests |
-
-## Example Usage
-
-```
-User: "I'm looking for a coffee place"
-Bot: "I can help you find ZUS Coffee outlets! Which area?"
-User: "Kuala Lumpur with delivery"  
-Bot: "Found 2 outlets in KL with delivery: ZUS KLCC, ZUS Mid Valley..."
-
-User: "Show me coffee mugs"
-Bot: "Here are ZUS drinkware products: Premium Mug RM25.90, Travel Tumbler RM35.90..."
-
-User: "Calculate 15 * 8"
-Bot: "15 × 8 = 120"
-```
 
 ## Error Handling
 

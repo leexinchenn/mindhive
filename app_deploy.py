@@ -55,28 +55,71 @@ def execute_sql(query: str) -> List[Dict[str, Any]]:
 
 
 def text2sql(query: str) -> str:
-    """Convert natural language to SQL (simplified version)"""
-    query_lower = query.lower()
+    """Convert natural language to SQL (enhanced version from p4.py)"""
+    q = query.lower().strip()
     
-    # Basic text2sql logic for demo
-    if "all" in query_lower or "list" in query_lower:
+    # Handle show all requests
+    if any(word in q for word in ['all', 'show all', 'list all', 'every']):
         return "SELECT * FROM outlets ORDER BY name"
-    elif "count" in query_lower:
-        return "SELECT COUNT(*) as total_outlets FROM outlets"
+    
+    conditions = []
+    
+    # Location patterns (enhanced from p4.py)
+    location_patterns = {
+        'kuala lumpur': ['kl', 'kuala lumpur', 'wilayah persekutuan'],
+        'selangor': ['selangor', 'shah alam', 'petaling jaya', 'pj'],
+        'putrajaya': ['putrajaya'],
+        'klang': ['klang'],
+        'ampang': ['ampang'],
+        'cheras': ['cheras'],
+        'bangsar': ['bangsar'],
+        'mont kiara': ['mont kiara'],
+        'damansara': ['damansara'],
+        'subang': ['subang'],
+        'bangi': ['bangi'],
+        'cyberjaya': ['cyberjaya'],
+        'setapak': ['setapak'],
+        'kepong': ['kepong'],
+        'puchong': ['puchong']
+    }
+    
+    for location, keywords in location_patterns.items():
+        if any(keyword in q for keyword in keywords):
+            conditions.append(f"LOWER(location) LIKE '%{location.split()[0]}%' OR LOWER(address) LIKE '%{location.split()[0]}%'")
+            break
+    
+    # Service filters
+    if any(word in q for word in ['delivery', 'deliver']):
+        conditions.append("LOWER(opening_hours) LIKE '%delivery%'")
+    elif any(word in q for word in ['dine-in', 'dine in', 'sit in']):
+        conditions.append("LOWER(opening_hours) LIKE '%dine%'")
+    
+    # Mall detection
+    mall_keywords = ['mall', 'shopping', 'centre', 'center', 'plaza', 'complex']
+    if any(keyword in q for keyword in mall_keywords):
+        mall_condition = " OR ".join([f"LOWER(address) LIKE '%{keyword}%'" for keyword in mall_keywords])
+        conditions.append(f"({mall_condition})")
+    
+    # Build final query
+    if conditions:
+        where_clause = " OR ".join(conditions)
+        sql = f"SELECT * FROM outlets WHERE {where_clause} ORDER BY name"
     else:
-        # Search for outlets containing keywords
-        words = query_lower.split()
-        conditions = []
-        for word in words:
-            if len(word) > 2:  # Skip short words
-                condition = f"(LOWER(name) LIKE '%{word}%' OR LOWER(location) LIKE '%{word}%' OR LOWER(address) LIKE '%{word}%')"
-                conditions.append(condition)
+        # Fallback to keyword search
+        search_terms = q.split()
+        fuzzy_conditions = []
+        for term in search_terms:
+            if len(term) > 2:
+                fuzzy_conditions.append(f"(LOWER(name) LIKE '%{term}%' OR LOWER(location) LIKE '%{term}%' OR LOWER(address) LIKE '%{term}%')")
         
-        if conditions:
-            where_clause = " OR ".join(conditions)
-            return f"SELECT * FROM outlets WHERE {where_clause} ORDER BY name"
+        if fuzzy_conditions:
+            where_clause = " OR ".join(fuzzy_conditions)
+            sql = f"SELECT * FROM outlets WHERE {where_clause} ORDER BY name"
         else:
-            return "SELECT * FROM outlets ORDER BY name"
+            sql = "SELECT * FROM outlets ORDER BY name"
+    
+    print(f"[DEBUG] Generated SQL: {sql}")
+    return sql
 
 
 def ingest_outlets_from_web():
@@ -137,21 +180,44 @@ PRODUCTS = []
 
 
 def search_products(query: str, k: int = 5) -> List[Dict[str, Any]]:
-    """Simple text search in products"""
+    """Enhanced text search in products (inspired by p4.py)"""
     if not query:
         return []
     
     query_lower = query.lower()
     results = []
+    scored_results = []
     
     for product in PRODUCTS:
         name_lower = product.get("name", "").lower()
         desc_lower = product.get("description", "").lower()
+        score = 0
         
-        if query_lower in name_lower or query_lower in desc_lower:
-            results.append(product)
+        # Exact name match gets highest score
+        if query_lower in name_lower:
+            score += 10
+        
+        # Description match
+        if query_lower in desc_lower:
+            score += 5
+        
+        # Word-by-word matching for better relevance
+        query_words = query_lower.split()
+        for word in query_words:
+            if len(word) > 2:  # Skip short words
+                if word in name_lower:
+                    score += 3
+                if word in desc_lower:
+                    score += 1
+        
+        if score > 0:
+            scored_results.append((score, product))
     
-    return results[:k]
+    # Sort by score (highest first) and return top k
+    scored_results.sort(key=lambda x: x[0], reverse=True)
+    results = [product for score, product in scored_results[:k]]
+    
+    return results
 
 
 # --- Response Models ---

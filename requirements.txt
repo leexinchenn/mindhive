@@ -2,14 +2,3 @@ fastapi
 uvicorn[standard]
 pydantic
 requests
-numpy
-sentence-transformers
-faiss-cpu
-langchain-google-genai
-langchain-community
-langchain
-selenium
-pytest
-unittest-xml-reporting
-python-dotenv
-beautifulsoup4

@@ -6,6 +6,7 @@ from pydantic import BaseModel
 import requests
 from sentence_transformers import SentenceTransformer
 import faiss
+from contextlib import asynccontextmanager
 
 
 class ProductDoc(BaseModel):
@@ -351,19 +352,22 @@ def execute_sql(sql: str) -> List[dict]:
 
 
 # --- FastAPI App ---
-app = FastAPI(
-    title="ZUS Coffee API",
-    description="Product KB and Outlets Text2SQL endpoints",
-    version="1.0",
-)
-
-
-@app.on_event("startup")
-def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
     print("[STARTUP] Initializing ZUS Coffee API...")
     ingest_product_docs_from_csv()
     ingest_outlets_from_web()
     print("[STARTUP] API initialization complete!")
+    yield
+    # Shutdown (if needed)
+
+app = FastAPI(
+    title="ZUS Coffee API",
+    description="Product KB and Outlets Text2SQL endpoints",
+    version="1.0",
+    lifespan=lifespan
+)
 
 
 @app.get("/products")

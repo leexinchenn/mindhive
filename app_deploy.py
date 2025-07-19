@@ -125,11 +125,11 @@ def text2sql(query: str) -> str:
 def ingest_outlets_from_web():
     """Load outlets data from web scraping (simplified)"""
     sample_outlets = [
-        ("ZUS Coffee SS2", "Petaling Jaya", "123 SS2/75, Petaling Jaya", "03-12345678", "7:00 AM - 10:00 PM"),
-        ("ZUS Coffee KLCC", "Kuala Lumpur", "Suria KLCC, Level 2", "03-87654321", "8:00 AM - 11:00 PM"),
-        ("ZUS Coffee Sunway", "Subang Jaya", "Sunway Pyramid Mall", "03-11223344", "9:00 AM - 10:00 PM"),
-        ("ZUS Coffee Mid Valley", "Kuala Lumpur", "Mid Valley Megamall", "03-55667788", "8:00 AM - 11:00 PM"),
-        ("ZUS Coffee Bangsar", "Bangsar", "Bangsar Village II", "03-99887766", "7:30 AM - 9:30 PM"),
+        ("ZUS Coffee SS2", "Petaling Jaya", "123 SS2/75, Petaling Jaya", "7:00 AM - 10:00 PM", "dine-in,takeaway"),
+        ("ZUS Coffee KLCC", "Kuala Lumpur", "Suria KLCC, Level 2", "8:00 AM - 11:00 PM", "dine-in,delivery"),
+        ("ZUS Coffee Sunway", "Subang Jaya", "Sunway Pyramid Mall", "9:00 AM - 10:00 PM", "dine-in,takeaway"),
+        ("ZUS Coffee Mid Valley", "Kuala Lumpur", "Mid Valley Megamall", "8:00 AM - 11:00 PM", "dine-in,takeaway,delivery"),
+        ("ZUS Coffee Bangsar", "Bangsar", "Bangsar Village II", "7:30 AM - 9:30 PM", "dine-in,delivery"),
     ]
     
     conn = sqlite3.connect("zus_outlets.db")
@@ -141,7 +141,7 @@ def ingest_outlets_from_web():
     # Insert sample data
     for outlet in sample_outlets:
         cursor.execute("""
-            INSERT INTO outlets (name, location, address, phone, opening_hours)
+            INSERT INTO outlets (name, location, address, hours, services)
             VALUES (?, ?, ?, ?, ?)
         """, outlet)
     
